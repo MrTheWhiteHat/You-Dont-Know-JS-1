@@ -1,41 +1,41 @@
-# You Don't Know JS: Types & Grammar
-# Chapter 1: Types
+# 你不知道的JavaScript:类型和语法
+# 第一章：类型
 
-Most developers would say that a dynamic language (like JS) does not have *types*. Let's see what the ES5.1 specification (http://www.ecma-international.org/ecma-262/5.1/) has to say on the topic:
+大多数开发人员认为，动态语言（如JavaScript）并没有*类型*。让我们来看看ES5.1的规范(http://www.ecma-international.org/ecma-262/5.1/)对于这部分内容是怎么说的：
 
-> Algorithms within this specification manipulate values each of which has an associated type. The possible value types are exactly those defined in this clause. Types are further sub classified into ECMAScript language types and specification types.
+> 本规范中所有算法所操作的值都有一个类型与之对应。这些值的类型均在本规范中对应。当然，这些类型也可能是ECMAScript语言中规定的类型的子类型。
 >
-> An ECMAScript language type corresponds to values that are directly manipulated by an ECMAScript programmer using the ECMAScript language. The ECMAScript language types are Undefined, Null, Boolean, String, Number, and Object.
+> 在ECMAScript语言中，每个ECMAScript类型所对应的值都被ECMAScript程序开发人员直接操作。ECMAScript语言中规定的类型为Undefined， Null，Boolean，String，Number，以及Object。
 
-Now, if you're a fan of strongly typed (statically typed) languages, you may object to this usage of the word "type." In those languages, "type" means a whole lot *more* than it does here in JS.
+如果你是强类型语言（静态语言）的粉丝，你也许会对这样使用“类型”感到很反感。在那些语言里，“类型”所拥有的含义可比在JS里的多得多。
 
-Some people say JS shouldn't claim to have "types," and they should instead be called "tags" or perhaps "subtypes".
+有人说JS不应该声称它有“类型，应该把这种东西称为“标签”，或是“子类型”。
 
-Bah! We're going to use this rough definition (the same one that seems to drive the wording of the spec): a *type* is an intrinsic, built-in set of characteristics that uniquely identifies the behavior of a particular value and distinguishes it from other values, both to the engine **and to the developer**.
+好吧。我们将使用这一粗略的定义（类似于规范中所描述的）：一个*类型*是一个固有的，内建的特征集，无论是编译引擎还是**开发人员**，都可以用它来确定一个值的行为，并把这个值和其他值加以区分。
 
-In other words, if both the engine and the developer treat value `42` (the number) differently than they treat value `"42"` (the string), then those two values have different *types* -- `number` and `string`, respectively. When you use `42`, you are *intending* to do something numeric, like math. But when you use `"42"`, you are *intending* to do something string'ish, like outputting to the page, etc. **These two values have different types.**
+简单来说，如果在编译引擎和开发人员眼里，值`42`（数字）和值`"42"`（字符串）处理的方法不同，那么我们就说他们有不同的*类型*——`number`和`string`。当你处理`42`时，你将使用一些处理数字的方法，比如数学运算。而当你处理`"42"`时，你则会使用一些字符串处理方法，比如输出到页面，等等。**这两个值有不同的类型。**
 
-That's by no means a perfect definition. But it's good enough for this discussion. And it's consistent with how JS describes itself.
+虽然这并不是什么严谨的定义，但对于我们接下来的讨论，已经绰绰有余了。而且这样的定义，和JS如何形容自己是一致的。
 
-# A Type By Any Other Name...
+# 类型——或是别的什么
 
-Beyond academic definition disagreements, why does it matter if JavaScript has *types* or not?
+不考虑学术上的争论，我们来想想为什么JavaScript会需要*类型*？
 
-Having a proper understanding of each *type* and its intrinsic behavior is absolutely essential to understanding how to properly and accurately convert values to different types (see Coercion, Chapter 4). Nearly every JS program ever written will need to handle value coercion in some shape or form, so it's important you do so responsibly and with confidence.
+对于每种*类型*及其基本行为都有所了解，有助于更高效的将值进行类型转换（详见第四章，类型转换）。几乎所有的JS程序，都存在着这样那样的类型转换，所以了解这些，对你来说很重要。
 
-If you have the `number` value `42`, but you want to treat it like a `string`, such as pulling out the `"2"` as a character in position `1`, you obviously must first convert (coerce) the value from `number` to `string`.
+如果你有一个值为`42`的`number`，但想对它进行`string`类型的操作，如移除`1`位置的字符`"2"`，你最好先将这个值的类型从`number`转换为`string`。
 
-That seems simple enough.
+这看似很简单。
 
-But there are many different ways that such coercion can happen. Some of these ways are explicit, easy to reason about, and reliable. But if you're not careful, coercion can happen in very strange and surprising ways.
+但是进行这样的类型转换，有很多方式。有些方式很明确，很简单就能说出来龙去脉，并且也值得信赖.但如果你不够细心，类型转换可能以一种匪夷所思的方式展现在你面前。
 
-Coercion confusion is perhaps one of the most profound frustrations for JavaScript developers. It has often been criticized as being so *dangerous* as to be considered a flaw in the design of the language, to be shunned and avoided.
+类型转换可能是JavaScript最大的疑惑之一了。这点经常被视为这一语言的缺陷，是应该避免使用的。
 
-Armed with a full understanding of JavaScript types, we're aiming to illustrate why coercion's *bad reputation* is largely overhyped and somewhat undeserved -- to flip your perspective, to seeing coercion's power and usefulness. But first, we have to get a much better grip on values and types.
+由于有了对JavaScript类型的全面了解，我们希望能够说明为何类型转换的*坏名声*言过其实，甚至是不恰当的——我们会改变你的传统观点，让你看到类型转换的强大力量和实用性。不过首先，我们先来了解一下值和类型。
 
-## Built-in Types
+## 内建类型
 
-JavaScript defines seven built-in types:
+JavaScript定义了七种内建类型：
 
 * `null`
 * `undefined`
@@ -43,11 +43,11 @@ JavaScript defines seven built-in types:
 * `number`
 * `string`
 * `object`
-* `symbol` -- added in ES6!
+* `symbol` —— ES6中新增
 
-**Note:** All of these types except `object` are called "primitives".
+**提示：**以上类型，除`object`的被称为基本类型。
 
-The `typeof` operator inspects the type of the given value, and always returns one of seven string values -- surprisingly, there's not an exact 1-to-1 match with the seven built-in types we just listed.
+`typeof`运算符会检测所给值得类型，并返回以下其中字符串类型的值——然而奇怪的是，返回的结果和我们刚刚列出的的内建类型并不一一对应。
 
 ```js
 typeof undefined     === "undefined"; // true
@@ -56,21 +56,21 @@ typeof 42            === "number";    // true
 typeof "42"          === "string";    // true
 typeof { life: 42 }  === "object";    // true
 
-// added in ES6!
+// ES6新增！
 typeof Symbol()      === "symbol";    // true
 ```
 
-These six listed types have values of the corresponding type and return a string value of the same name, as shown. `Symbol` is a new data type as of ES6, and will be covered in Chapter 3.
+列出的六种类型的值都会返回一个对应类型名称的字符串。`Symbol`是ES6中新增的数据类型，我们会在第三章详细介绍。
 
-As you may have noticed, I excluded `null` from the above listing. It's *special* -- special in the sense that it's buggy when combined with the `typeof` operator:
+你也许注意到了，我将`null`从列表中除去了。因为他很特殊——当使用`typeof`运算符时，它表现的就像bug一样：
 
 ```js
 typeof null === "object"; // true
 ```
 
-It would have been nice (and correct!) if it returned `"null"`, but this original bug in JS has persisted for nearly two decades, and will likely never be fixed because there's too much existing web content that relies on its buggy behavior that "fixing" the bug would *create* more "bugs" and break a lot of web software.
+如果它返回的是`"null"`的话，那可真是件好事，可惜的是，这个bug已经存在了20年，而且由于有太多的web程序依赖这一bug运行，修复这一bug的话，将会创造更多的bug，并且使很多web应用无法运行，所以估计将来也不会修复。
 
-If you want to test for a `null` value using its type, you need a compound condition:
+如果你想要确定一个`null`类型的值是这一类型，你需要使用复合判定：
 
 ```js
 var a = null;
@@ -78,17 +78,17 @@ var a = null;
 (!a && typeof a === "object"); // true
 ```
 
-`null` is the only primitive value that is "falsy" (aka false-like; see Chapter 4) but that also returns `"object"` from the `typeof` check.
+`null`是基本类型中唯一值表现的像false一样的类型（详见第四章），但如果运行`typeof`进行检查，返回的还是`"object"`。
 
-So what's the seventh string value that `typeof` can return?
+那么，`typeof`返回的第七种字符串类型的值是什么？
 
 ```js
 typeof function a(){ /* .. */ } === "function"; // true
 ```
 
-It's easy to think that `function` would be a top-level built-in type in JS, especially given this behavior of the `typeof` operator. However, if you read the spec, you'll see it's actually a "subtype" of object. Specifically, a function is referred to as a "callable object" -- an object that has an internal `[[Call]]` property that allows it to be invoked.
+单拍脑袋想的话，很容易理解`function`（函数）会是JS中顶级的内建类型，尤其是它针对`typeof`运算符的表现。然而，如果你阅读相关的标准，会发现它实际上是对象类型（`object`）的子类型。更确切的说，函数是一种“可以被调用的对象”——一类拥有名为`[[Call]]`的内建属性且可以被调用的对象。
 
-The fact that functions are actually objects is quite useful. Most importantly, they can have properties. For example:
+函数实际上是对象这点其实很有用。最重要的一点就是，它可以有属性。例如：
 
 ```js
 function a(b,c) {
@@ -96,25 +96,25 @@ function a(b,c) {
 }
 ```
 
-The function object has a `length` property set to the number of formal parameters it is declared with.
+该函数具有一个`length`属性，值为函数形式参数的个数。
 
 ```js
 a.length; // 2
 ```
 
-Since you declared the function with two formal named parameters (`b` and `c`), the "length of the function" is `2`.
+本例中，函数声明中包括两个形参（`b`和`c`），所以“函数的长度”是`2`。
 
-What about arrays? They're native to JS, so are they a special type?
+那么数组呢？他们也是JS内置的类型，会不会有什么特殊的表现？
 
 ```js
 typeof [1,2,3] === "object"; // true
 ```
 
-Nope, just objects. It's most appropriate to think of them also as a "subtype" of object (see Chapter 3), in this case with the additional characteristics of being numerically indexed (as opposed to just being string-keyed like plain objects) and maintaining an automatically updated `.length` property.
+然而并没有，只是普通的对象罢了。一般将它们也视为对象的“子类型”（详见第三章），与普通对象不同的是，它们可以通过数字来序列化（就像普通对象那样可以通过字符串类型的key（键）来序列化一样），并且操作有可以自动更新的`length`属性。
 
-## Values as Types
+## 值和对象
 
-In JavaScript, variables don't have types -- **values have types**. Variables can hold any value, at any time.
+在JavaScript中，变量不具有类型——**值有类型**。变量可以在任何时刻保存任何值。
 
 Another way to think about JS types is that JS doesn't have "type enforcement," in that the engine doesn't insist that a *variable* always holds values of the *same initial type* that it starts out with. A variable can, in one assignment statement, hold a `string`, and in the next hold a `number`, and so on.
 
