@@ -1,5 +1,19 @@
 # You Don't Know JS (book series)
 
+## 翻译计划
+
+开始翻译这个非常经典的JavaScript语言丛书，希望大家可以多多关注和参与帮忙。
+
+对于现有的翻译内容，可以适当参考，如果有照抄照搬行为请先征求原作者同意，如引发纠纷，本仓库及相关负责人员不负责。
+
+优先翻译目前没有轮子的干货。
+
+所有参考内容，均需要写在下面的参考文献中：
+
+参考文献：
+
+ - [图灵社区公开的翻译内容](http://www.ituring.com.cn/book/1488)
+
 This is a series of books diving deep into the core mechanisms of the JavaScript language.
 
 <a href="http://shop.oreilly.com/product/0636920039303.do"><img src="up %26 going/cover.jpg" width="75"></a>&nbsp;
