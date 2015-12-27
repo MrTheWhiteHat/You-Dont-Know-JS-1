@@ -366,11 +366,9 @@ var onemilliononehundredthousand = 1.1E6;	// means 1.1 * 10^6
 
 如果我们真的需要比较两个数字，像`0.1 + 0.2`和`0.3`这种，既然知道简单的判定会失效，那么该怎么办？
 
+一种常用的方法是，使用在比较中使用一个足够小到可以接受的误差。常被叫做“机器误差”，在JavaScript中我们常使用`2^-52` (`2.220446049250313e-16`)来作为这个值。
 
-
-The most commonly accepted practice is to use a tiny "rounding error" value as the *tolerance* for comparison. This tiny value is often called "machine epsilon," which is commonly `2^-52` (`2.220446049250313e-16`) for the kind of `number`s in JavaScript.
-
-As of ES6, `Number.EPSILON` is predefined with this tolerance value, so you'd want to use it, but you can safely polyfill the definition for pre-ES6:
+在ES6中，`Number.EPSILON`预定义了这个可以容忍的误差，如果你想在不支持ES6的环境下使用，可以使用下面的代码来兼容：
 
 ```js
 if (!Number.EPSILON) {
@@ -378,7 +376,7 @@ if (!Number.EPSILON) {
 }
 ```
 
-We can use this `Number.EPSILON` to compare two `number`s for "equality" (within the rounding error tolerance):
+我们可以使用`Number.EPSILON`来比较相等：
 
 ```js
 function numbersCloseEnoughToEqual(n1,n2) {
@@ -391,12 +389,14 @@ var b = 0.3;
 numbersCloseEnoughToEqual( a, b );					// true
 numbersCloseEnoughToEqual( 0.0000001, 0.0000002 );	// false
 ```
+浮点数可以表示的最大值约是`1.798e+308`（一个超大的数），在`Number.MAX_VALUE`中预定义。对于小数则大概是`5e-324`，被定义在`Number.MIN_VALUE`中，虽然没负但是很接近0了。
 
-The maximum floating-point value that can be represented is roughly `1.798e+308` (which is really, really, really huge!), predefined for you as `Number.MAX_VALUE`. On the small end, `Number.MIN_VALUE` is roughly `5e-324`, which isn't negative but is really close to zero!
 
-### Safe Integer Ranges
+### 安全的整数
 
-Because of how `number`s are represented, there is a range of "safe" values for the whole `number` "integers", and it's significantly less than `Number.MAX_VALUE`.
+由于数字的存储方式，可以安全使用的整数，要比`Number.MAX_VALUE`小得多。
+
+最大的安全整数是`2^53 - 1`，等于`9007199254740991`
 
 The maximum integer that can "safely" be represented (that is, there's a guarantee that the requested value is actually representable unambiguously) is `2^53 - 1`, which is `9007199254740991`. If you insert your commas, you'll see that this is just over 9 quadrillion. So that's pretty darn big for `number`s to range up to.
 
